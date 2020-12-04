@@ -1,3 +1,52 @@
+schemaName: logical_shardingsphere
+# 配置真实数据源
+dataSources:
+  ds_0:
+    url: jdbc:mysql://192.168.56.103:3306/shardingsphere?serverTimezone=UTC&useSSL=false
+    username: zdj
+    password: zdj
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+  ds_1:
+    url: jdbc:mysql://192.168.56.103:3306/shardingsphere2?serverTimezone=UTC&useSSL=false
+    username: zdj
+    password: zdj
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 50
+
+rules:
+  # 配置分⽚规则
+  tables:
+  # 配置 t_order 表规则
+  t_order:
+    actualDataNodes: ds${0..1}.t_order${0..1}
+  # 配置分库策略
+  databaseStrategy:
+    standard:
+    shardingColumn: user_id
+    shardingAlgorithmName: database_inline
+  # 配置分表策略
+  tableStrategy:
+    standard:
+      shardingColumn: order_id
+      shardingAlgorithmName: table_inline
+
+  shardingAlgorithms:
+    database_inline:
+      type: INLINE
+      props:
+      algorithm-expression: ds${user_id % 2}
+    table_inline:
+      type: INLINE
+      props:
+        algorithm-expression: t_order_${order_id % 2}
+
+
+
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with

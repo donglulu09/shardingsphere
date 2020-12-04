@@ -27,7 +27,9 @@ import org.apache.shardingsphere.proxy.config.yaml.YamlProxyServerConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -68,7 +70,14 @@ public final class ProxyConfigurationLoader {
     private static File getResourceFile(final String path) {
         URL url = ProxyConfigurationLoader.class.getResource(path);
         if (null != url) {
-            return new File(url.getFile());
+            String decodeFile = null;
+            try {
+                // windows环境 会将空格转换为%20导致文件找不到 在这里重新进行decode转成正常的空格
+                decodeFile = URLDecoder.decode(url.getFile(), "utf-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return new File(decodeFile);
         }
         return new File(path);
     }

@@ -1,3 +1,25 @@
+authentication:
+  users:
+    root:
+      password: root
+    sharding:
+      password: sharding
+      authorizedSchemas: logical_shardingsphere
+props:
+  max.connections.size.per.query: 1
+  acceptor.size: 16  # The default value is available processors count * 2.
+  executor.size: 16  # Infinite by default.
+  proxy.frontend.flush.threshold: 128  # The default value is 128.
+    # LOCAL: 代理将与本地事务一起运行
+    # XA: 代理将与XA事务一起运行。
+  # BASE: 代理将与B.A.S.E交易一起运行。
+  proxy.transaction.type: LOCAL
+  proxy.opentracing.enabled: false
+  proxy.hint.enabled: false
+  query.with.cipher.column: true
+  sql.show: false
+  allow.range.query.with.inline.sharding: false
+
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
