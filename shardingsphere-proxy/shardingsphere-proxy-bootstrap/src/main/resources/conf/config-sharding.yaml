@@ -1,49 +1,48 @@
 schemaName: logical_shardingsphere
-# 配置真实数据源
+
+dataSourceCommon:
+  connectionTimeoutMilliseconds: 30000
+  idleTimeoutMilliseconds: 60000
+  maxLifetimeMilliseconds: 1800000
+  maxPoolSize: 50
+  minPoolSize: 1
+  maintenanceIntervalMilliseconds: 30000
+
 dataSources:
   ds_0:
     url: jdbc:mysql://192.168.56.103:3306/shardingsphere?serverTimezone=UTC&useSSL=false
     username: zdj
     password: zdj
-    connectionTimeoutMilliseconds: 30000
-    idleTimeoutMilliseconds: 60000
-    maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 50
   ds_1:
     url: jdbc:mysql://192.168.56.103:3306/shardingsphere2?serverTimezone=UTC&useSSL=false
     username: zdj
     password: zdj
-    connectionTimeoutMilliseconds: 30000
-    idleTimeoutMilliseconds: 60000
-    maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 50
 
 rules:
-  # 配置分⽚规则
+- !SHARDING
   tables:
-  # 配置 t_order 表规则
-  t_order:
-    actualDataNodes: ds${0..1}.t_order${0..1}
-  # 配置分库策略
-  databaseStrategy:
-    standard:
-    shardingColumn: user_id
-    shardingAlgorithmName: database_inline
-  # 配置分表策略
-  tableStrategy:
-    standard:
-      shardingColumn: order_id
-      shardingAlgorithmName: table_inline
+    user:
+      actualDataNodes: ds_${0..1}.user_${0..1}
+      tableStrategy:
+        standard:
+          shardingColumn: id
+          shardingAlgorithmName: user_inline
+  defaultDatabaseStrategy:
+    none:
+  defaultTableStrategy:
+    none:
 
   shardingAlgorithms:
-    database_inline:
+    user_inline:
       type: INLINE
       props:
-      algorithm-expression: ds${user_id % 2}
-    table_inline:
-      type: INLINE
+        algorithm-expression: user_${id % 2}
+
+  keyGenerators:
+    snowflake:
+      type: SNOWFLAKE
       props:
-        algorithm-expression: t_order_${order_id % 2}
+        worker-id: 123
 
 
 
@@ -118,7 +117,7 @@ rules:
 #      shardingAlgorithmName: database_inline
 #  defaultTableStrategy:
 #    none:
-#  
+#
 #  shardingAlgorithms:
 #    database_inline:
 #      type: INLINE
@@ -132,7 +131,7 @@ rules:
 #      type: INLINE
 #      props:
 #        algorithm-expression: t_order_item_${order_id % 2}
-#  
+#
 #  keyGenerators:
 #    snowflake:
 #      type: SNOWFLAKE
