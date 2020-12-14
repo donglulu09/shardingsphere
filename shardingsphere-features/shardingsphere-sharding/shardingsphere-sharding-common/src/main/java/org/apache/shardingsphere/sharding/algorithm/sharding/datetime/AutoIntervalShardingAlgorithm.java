@@ -42,13 +42,17 @@ import java.util.Properties;
  */
 @Getter
 public final class AutoIntervalShardingAlgorithm implements StandardShardingAlgorithm<Comparable<?>>, ShardingAutoTableAlgorithm {
-    
+
+    // 时间下限 分片的开始时间
     private static final String DATE_TIME_LOWER_KEY = "datetime-lower";
-    
+
+    // 时间上限 分片的结束时间
     private static final String DATE_TIME_UPPER_KEY = "datetime-upper";
-    
+
+    // 按时间分片的秒数  一天一张表就是86400秒
     private static final String SHARDING_SECONDS_KEY = "sharding-seconds";
-    
+
+    // 时间格式
     private static final DateTimeFormatter DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     
     @Setter

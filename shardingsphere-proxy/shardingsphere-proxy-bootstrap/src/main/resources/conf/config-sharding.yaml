@@ -25,7 +25,9 @@ rules:
       actualDataNodes: ds_0.user_${0..5}
       tableStrategy:
         standard:
+          # 分片列名
           shardingColumn: create_time
+          # 分片算法名称
           shardingAlgorithmName: sharding_by_time
       keyGenerateStrategy:
         column: id
@@ -37,10 +39,14 @@ rules:
 
   shardingAlgorithms:
     sharding_by_time:
+      # 分片类型
       type: auto_interval
       props:
+        # 分片开始时间
         datetime-lower: "2020-10-01 00:00:00"
+        # 分片秒数 这里是一天一张表 秒数为86400秒
         sharding-seconds: "86400"
+        # 分片结束时间
         datetime-upper: "2020-10-05 00:00:00"
 
   keyGenerators:
