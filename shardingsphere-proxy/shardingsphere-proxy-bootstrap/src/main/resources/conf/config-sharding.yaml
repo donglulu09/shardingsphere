@@ -10,9 +10,9 @@ dataSourceCommon:
 
 dataSources:
   ds_0:
-    url: jdbc:mysql://192.168.56.103:3306/shardingsphere?serverTimezone=UTC&useSSL=false
-    username: zdj
-    password: zdj
+    url: jdbc:mysql://127.0.0.1:3306/sharding1?serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
   ds_1:
     url: jdbc:mysql://192.168.56.103:3306/shardingsphere2?serverTimezone=UTC&useSSL=false
     username: zdj
@@ -22,11 +22,14 @@ rules:
 - !SHARDING
   tables:
     user:
-      actualDataNodes: ds_${0..1}.user_${0..1}
+      actualDataNodes: ds_0.user_${0..1}
       tableStrategy:
         standard:
           shardingColumn: id
           shardingAlgorithmName: user_inline
+      keyGenerateStrategy:
+        column: id
+        keyGeneratorName: snowflake
   defaultDatabaseStrategy:
     none:
   defaultTableStrategy:
@@ -42,7 +45,7 @@ rules:
     snowflake:
       type: SNOWFLAKE
       props:
-        worker-id: 123
+        worker-id: 1
 
 
 
