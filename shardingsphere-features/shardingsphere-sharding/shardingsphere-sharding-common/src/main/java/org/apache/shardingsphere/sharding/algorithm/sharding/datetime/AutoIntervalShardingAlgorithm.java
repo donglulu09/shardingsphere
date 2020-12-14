@@ -132,7 +132,11 @@ public final class AutoIntervalShardingAlgorithm implements StandardShardingAlgo
         LocalDateTime dateValue = LocalDateTime.parse(shardingValue.toString(), DATE_TIME_FORMAT);
         return Duration.between(dateTimeLower, dateValue).toMillis() / 1000;
     }
-    
+
+    /**
+     * 使用该分片算法中 需要配置的类型
+     * @return 类型
+     */
     @Override
     public String getType() {
         return "AUTO_INTERVAL";
