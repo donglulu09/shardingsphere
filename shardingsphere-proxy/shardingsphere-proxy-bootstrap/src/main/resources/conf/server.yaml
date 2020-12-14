@@ -17,8 +17,9 @@ props:
   proxy.opentracing.enabled: false
   proxy.hint.enabled: false
   query.with.cipher.column: true
-  sql.show: false
+  sql-show: true
   allow.range.query.with.inline.sharding: false
+
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more

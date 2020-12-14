@@ -41,6 +41,7 @@ public final class TypedSPIRegistry {
      * @return registered service
      */
     public static <T extends TypedSPI> T getRegisteredService(final Class<T> typedSPIClass, final String type, final Properties props) {
+        // 实例化SPI服务，并根据类型过滤
         Optional<T> serviceInstance = ShardingSphereServiceLoader.newServiceInstances(typedSPIClass).stream().filter(each -> each.getType().equalsIgnoreCase(type)).findFirst();
         if (serviceInstance.isPresent()) {
             T result = serviceInstance.get();

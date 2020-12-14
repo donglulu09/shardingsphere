@@ -68,6 +68,7 @@ public final class AutoIntervalShardingAlgorithm implements StandardShardingAlgo
     }
     
     private LocalDateTime getDateTime(final String dateTimeKey) {
+        // value在配置文件中必须是字符串 否则返回null
         String value = props.getProperty(dateTimeKey);
         Preconditions.checkNotNull(value, "%s cannot be null.", dateTimeKey);
         try {

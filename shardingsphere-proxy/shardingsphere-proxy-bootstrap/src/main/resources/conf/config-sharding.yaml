@@ -13,20 +13,20 @@ dataSources:
     url: jdbc:mysql://127.0.0.1:3306/sharding1?serverTimezone=UTC&useSSL=false
     username: root
     password: root
-  ds_1:
-    url: jdbc:mysql://192.168.56.103:3306/shardingsphere2?serverTimezone=UTC&useSSL=false
-    username: zdj
-    password: zdj
+#  ds_1:
+#    url: jdbc:mysql://192.168.56.103:3306/shardingsphere2?serverTimezone=UTC&useSSL=false
+#    username: zdj
+#    password: zdj
 
 rules:
 - !SHARDING
   tables:
     user:
-      actualDataNodes: ds_0.user_${0..1}
+      actualDataNodes: ds_0.user_${0..5}
       tableStrategy:
         standard:
-          shardingColumn: id
-          shardingAlgorithmName: user_inline
+          shardingColumn: create_time
+          shardingAlgorithmName: sharding_by_time
       keyGenerateStrategy:
         column: id
         keyGeneratorName: snowflake
@@ -36,10 +36,12 @@ rules:
     none:
 
   shardingAlgorithms:
-    user_inline:
-      type: INLINE
+    sharding_by_time:
+      type: auto_interval
       props:
-        algorithm-expression: user_${id % 2}
+        datetime-lower: "2020-10-01 00:00:00"
+        sharding-seconds: "86400"
+        datetime-upper: "2020-10-05 00:00:00"
 
   keyGenerators:
     snowflake:
